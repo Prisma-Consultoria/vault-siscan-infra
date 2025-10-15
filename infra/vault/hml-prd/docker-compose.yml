@@ -1,0 +1,52 @@
+version: "3.9"
+
+networks:
+  net-vault:
+    name: net-vault
+
+volumes:
+  vault-data:
+  vault-audit:
+  caddy-data:
+  caddy-config:
+
+services:
+  vault:
+    image: hashicorp/vault:1.16
+    container_name: vault
+    restart: unless-stopped
+    cap_add:
+      - IPC_LOCK
+    environment:
+      VAULT_API_ADDR: "http://vault:8200"
+      VAULT_CLUSTER_ADDR: "http://vault:8201"
+      VAULT_UI: "true"
+    expose:
+      - "8200"
+      - "8201"
+    command: ["server", "-config=/vault/config/vault.hcl"]
+    volumes:
+      - ./vault.hcl:/vault/config/vault.hcl:ro
+      - vault-data:/vault/file
+      - vault-audit:/vault/audit
+    networks:
+      - net-vault
+
+  caddy:
+    image: caddy:2
+    container_name: vault-proxy
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - net-vault
+    depends_on:
+      - vault

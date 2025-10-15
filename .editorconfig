@@ -1,0 +1,21 @@
+# EditorConfig ajuda a manter consistência de formatação entre editores/IDEs
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Indentação padrão
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.{yml,yaml,hcl,json}]
+indent_size = 2
+
+[*.sh]
+indent_size = 2

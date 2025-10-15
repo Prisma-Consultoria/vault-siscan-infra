@@ -1,0 +1,31 @@
+name: Lint Docker Compose
+
+on:
+  pull_request:
+    paths:
+      - 'infra/vault/**.yml'
+      - 'infra/vault/**.yaml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'infra/vault/**.yml'
+      - 'infra/vault/**.yaml'
+
+jobs:
+  compose-config-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verificar docker-compose (DEV)
+        working-directory: infra/vault/dev
+        run: |
+          docker compose version
+          docker compose -f docker-compose.yml config
+
+      - name: Verificar docker-compose (HML/PRD)
+        working-directory: infra/vault/hml-prd
+        run: |
+          docker compose version
+          docker compose -f docker-compose.yml config

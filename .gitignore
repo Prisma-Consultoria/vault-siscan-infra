@@ -1,0 +1,41 @@
+# Raiz
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Arquivos sensíveis e ambientes
+.env
+.env.*
+!.env.dev.sample
+!.env.hml.sample
+!.env.prd.sample
+
+# Vault data (Raft) e auditoria
+infra/vault/**/vault-data*/
+infra/vault/**/vault-audit*/
+infra/vault/**/audit.log
+infra/vault/**/audit/*.log
+infra/vault/**/raft/*
+infra/vault/**/raft-snapshots/*
+infra/vault/**/raft-snapshot*
+infra/vault/**/backup*
+infra/vault/**/data
+
+# Caddy state
+infra/vault/hml-prd/caddy/data
+infra/vault/hml-prd/caddy/config
+infra/vault/hml-prd/caddy/*.json
+
+# Chaves/certificados privados (não versionar)
+**/*.key
+**/*.pem
+**/*.crt
+**/*.cer
+**/*.p12
+
+# Saídas temporárias
+*.tmp
+*.bak
+*.log
+tmp/

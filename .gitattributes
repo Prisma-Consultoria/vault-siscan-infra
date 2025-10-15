@@ -1,0 +1,18 @@
+# Normalização de final de linha e diffs
+* text=auto eol=lf
+
+# Tratar HCL e YAML de forma amigável em diffs
+*.hcl diff
+*.tf  diff
+*.yaml diff
+*.yml  diff
+
+# Scripts shell
+*.sh linguist-language=Shell
+
+# Arquivos binários (não tentar diff)
+*.crt binary
+*.cer binary
+*.p12 binary
+*.pem binary
+*.key binary
