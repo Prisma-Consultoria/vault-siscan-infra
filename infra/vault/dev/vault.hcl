@@ -5,16 +5,12 @@ storage "raft" {
 
 listener "tcp" {
   address     = "0.0.0.0:8200"
-  tls_disable = 1  # Somente DEV. Em HML/PRD usar TLS no proxy.
+  tls_disable = 1
 }
 
 api_addr     = "http://vault:8200"
 cluster_addr = "http://vault:8201"
 ui           = true
 
-audit {
-  type = "file"
-  path = "/vault/audit/audit.log"
-}
-
-disable_mlock = false
+# Em DEV, desabilitar mlock evita reinícios em hosts sem memlock
+disable_mlock = true

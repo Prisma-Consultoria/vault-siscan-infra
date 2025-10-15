@@ -5,6 +5,7 @@
 Thumbs.db
 
 # Arquivos sensíveis e ambientes
+.idea/*
 .env
 .env.*
 !.env.dev.sample

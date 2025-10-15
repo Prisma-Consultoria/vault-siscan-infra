@@ -1,36 +1,26 @@
-version: "3.9"
-
-networks:
-  net-vault:
-    name: net-vault
-
-volumes:
-  vault-data:
-  vault-audit:
-  caddy-data:
-  caddy-config:
-
 services:
   vault:
     image: hashicorp/vault:1.16
-    container_name: vault
+    container_name: vault-dev
     restart: unless-stopped
     cap_add:
       - IPC_LOCK
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     environment:
-      VAULT_API_ADDR: "http://vault:8200"
+      VAULT_ADDR: "http://0.0.0.0:8200"           # pode manter
+      VAULT_API_ADDR: "http://vault:8205"         # <— alinhar com vault.hcl
       VAULT_CLUSTER_ADDR: "http://vault:8201"
       VAULT_UI: "true"
-    expose:
-      - "8200"
-      - "8201"
+    ports:
+      - "8200:8205"                               # <— host 8200 → contêiner 8205
     command: ["server", "-config=/vault/config/vault.hcl"]
     volumes:
       - ./vault.hcl:/vault/config/vault.hcl:ro
-      - vault-data:/vault/file
-      - vault-audit:/vault/audit
-    networks:
-      - net-vault
+      - vault-data-dev:/vault/file
+      - vault-audit-dev:/vault/audit
 
   caddy:
     image: caddy:2
@@ -50,3 +40,13 @@ services:
       - net-vault
     depends_on:
       - vault
+
+networks:
+  net-vault:
+    name: net-vault
+
+volumes:
+  vault-data:
+  vault-audit:
+  caddy-data:
+  caddy-config:
